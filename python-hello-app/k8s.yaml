@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: nginx
+          image: "arindambanerjee/hello-python-app"
+          ports:
+          - containerPort: 8080
+          livenessProbe:
+                httpGet:
+                    path: /get-multiply/5
+                    port: 8080
+                initialDelaySeconds: 15
+                timeoutSeconds: 30 
+          readinessProbe:
+                httpGet:
+                    path: /get-multiply/5
+                    port: 8080
+                initialDelaySeconds: 15
+                timeoutSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http 
+  selector:
+    app: demo
+    tier: frontend
+  type: LoadBalancer

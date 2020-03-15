@@ -1,0 +1,5 @@
+fullname: helloapi-app
+labels: Micronaut-RestApi
+name: helloapi-app
+releasename: v1
+selectorLabels: helloapi-app
